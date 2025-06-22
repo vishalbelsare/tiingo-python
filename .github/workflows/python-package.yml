@@ -15,22 +15,27 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.6', '3.7', '3.8']
+        python-version: ['3.10', '3.11', '3.12']
         WITH_PANDAS: [false, true]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       env:
         WITH_PANDAS: ${{ matrix.WITH_PANDAS }}
+      # Install setuptools for the newer versions
+      # https://docs.python.org/3/whatsnew/3.12.html
       run: |
         python -m pip install --upgrade pip
+        if [ "$(python --version | cut -d ' ' -f 2 | cut -d '.' -f 1,2)" = "3.12" ]; then
+          pip install setuptools
+        fi
         python setup.py develop
-        python -m pip install flake8 pytest-cov codecov vcrpy black
+        python -m pip install flake8 pytest-cov coverage vcrpy black
         tools/install_pandas.sh
     - name: black
       run: |
@@ -46,5 +51,5 @@ jobs:
         TIINGO_API_KEY: 0000000000000000000000000000000000000000
       run: |
         py.test --cov=./tiingo
-    - name: Run code coverage
-      run: codecov
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3

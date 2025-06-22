@@ -29,10 +29,6 @@ requirements = [
     'websocket-client'
 ]
 
-setup_requirements = [
-    'pytest-runner',
-]
-
 test_requirements = [
     'pytest',
     'vcrpy',
@@ -70,11 +66,12 @@ setup(
         'Natural Language :: English',
         'Topic :: Office/Business :: Financial :: Investment',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
     ],
     test_suite='tests',
     tests_require=test_requirements,
-    setup_requires=setup_requirements,
 )
